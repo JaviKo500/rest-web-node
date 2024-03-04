@@ -4,7 +4,7 @@ import http, { IncomingMessage } from 'http';
 const server = http.createServer(( req: IncomingMessage, res ) => {
    console.log('<--------------- JK App --------------->');
    const path = req.url;
-   console.log();
+   console.log(path);
    // res.writeHead(200, { 'Content-Type': 'text/html' });
    // res.write( `<h1>Hello world ${req.url}</h1>`);
    // res.end();

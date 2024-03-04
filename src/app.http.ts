@@ -1,10 +1,7 @@
 import { readFileSync } from 'fs';
-import http2, {  } from 'http2';
+import http, { IncomingMessage } from 'http';
 
-const server = http2.createSecureServer( {
-   key: readFileSync('./keys/server.key'),
-   cert: readFileSync('./keys/server.crt'),
-}, ( req, res ) => {
+const server = http.createServer(( req: IncomingMessage, res ) => {
    console.log('<--------------- JK App --------------->');
    const path = req.url;
    console.log(path);

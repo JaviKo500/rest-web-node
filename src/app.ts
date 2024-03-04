@@ -23,6 +23,14 @@ const server = http.createServer(( req: IncomingMessage, res ) => {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.write(htmlFile);
       res.end();
+      
+   } else if ( path?.includes('js/')  || path?.includes('css/') ) {
+      const scriptFile = readFileSync(`./public${path}`, 'utf-8');
+      res.writeHead(200, { 'Content-Type': path?.includes('css/') 
+      ?  'text/css'
+      : 'application/javascript' });
+      res.write(scriptFile);
+      res.end();
    } else {
       const htmlFile = readFileSync('./public/404.html', 'utf-8');
       res.writeHead(404, { 'Content-Type': 'text/html' });

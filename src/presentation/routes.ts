@@ -1,18 +1,10 @@
 import { Router } from 'express';
+import { TodoRoutes } from './todos/todo.routes';
 
 export class AppRoutes {
    static get routes():Router {
       const router = Router();
-
-      router.get('/api/todo', (req, res) => {
-         res.status(200).json({
-           data: [
-               { id: 1, text: 'But milk', createAt: new Date() },
-               { id: 1, text: 'But milk', createAt: new Date() },
-               { id: 1, text: 'But milk', createAt: new Date() },
-            ],
-         });
-      });
+      router.use('/api/todo', TodoRoutes.routes );
       
       return router;
    }

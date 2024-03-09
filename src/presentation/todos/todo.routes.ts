@@ -5,6 +5,10 @@ export class TodoRoutes {
       const router = Router();
       const todoController = new TodoController();
       router.get('/', todoController.getListTodo);
+      router.get('/:id', todoController.getTodoById);
+      router.get('/create', todoController.getListTodo);
+      router.get('/update', todoController.getListTodo);
+      router.get('/delete', todoController.getListTodo);
       
       return router;
    }

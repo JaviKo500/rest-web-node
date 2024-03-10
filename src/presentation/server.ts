@@ -24,6 +24,8 @@ export class Server {
       // * middlewares
       // * public folders
       this.app.use( express.static(this.publicPath) );
+      this.app.use( express.json() );
+      this.app.use( express.urlencoded( { extended: true } ) );
 
       // * routes
       this.app.use( this.routes );

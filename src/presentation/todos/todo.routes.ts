@@ -6,7 +6,7 @@ export class TodoRoutes {
       const todoController = new TodoController();
       router.get('/', todoController.getListTodo);
       router.get('/:id', todoController.getTodoById);
-      router.get('/create', todoController.getListTodo);
+      router.post('/', todoController.createTodo);
       router.get('/update', todoController.getListTodo);
       router.get('/delete', todoController.getListTodo);
       

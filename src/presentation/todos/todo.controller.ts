@@ -36,5 +36,16 @@ export class TodoController {
             })
    }
 
+   createTodo = ( req: Request, res: Response ) => {
+      const { body } = req;
+
+      console.log('<--------------- JK Todo.controller --------------->');
+      console.log(body);
+
+      res.status(200).json({
+        msg: 'ok',
+      });
+   }
+
 
 }

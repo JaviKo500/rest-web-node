@@ -1,9 +1,10 @@
 import { Request, Response} from 'express';
+import { todo } from 'node:test';
 
 const listTodo =  [
-   { id: 1, text: 'But milk', createAt: new Date() },
-   { id: 2, text: 'But cheese', createAt: new Date() },
-   { id: 3, text: 'But bread', createAt: new Date() },
+   { id: 1, text: 'But milk', completedAt: new Date() },
+   { id: 2, text: 'But cheese', completedAt: new Date() },
+   { id: 3, text: 'But bread', completedAt: new Date() },
 ];
 export class TodoController {
    // * dependencies injected
@@ -37,15 +38,59 @@ export class TodoController {
    }
 
    createTodo = ( req: Request, res: Response ) => {
-      const { body } = req;
+      const { text } = req.body;
 
-      console.log('<--------------- JK Todo.controller --------------->');
-      console.log(body);
+      if ( !text ) return res.status(400).json({
+        msg: 'Text is required',
+      });
 
+      const newTodo = {
+         id: listTodo.length + 1,
+         text,
+         completedAt: new Date()
+      };
+
+      listTodo.push( newTodo );
+      
       res.status(200).json({
         msg: 'ok',
       });
    }
 
+   updateTodo = ( req: Request, res: Response ) => {
+      
+      const id  = +req?.params?.id; 
+
+      if ( !id || isNaN(id)) {
+         return res.status(400).json({
+           msg: 'id is invalid',
+         });
+      }
+
+      const selectedTodo = listTodo.find( todo => todo.id === id );
+
+      if (!selectedTodo) {
+         return res.status(404).json({
+           msg: `Todo with id ${id} not found`,
+         });
+      }
+
+      const { text, completedAt } = req.body;
+
+      if ( !text ) {
+         return res.status(400).json({
+           msg: 'Text is required',
+         });
+      }
+
+      if ( completedAt ) {
+         selectedTodo.text = completedAt;
+      }
+      selectedTodo.text = text;
+
+      res.status(200).json({
+        msg: 'Todo updated',
+      });
+   }
 
 }

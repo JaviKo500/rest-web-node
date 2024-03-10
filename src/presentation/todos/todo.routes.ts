@@ -6,9 +6,9 @@ export class TodoRoutes {
       const todoController = new TodoController();
       router.get('/', todoController.getListTodo);
       router.get('/:id', todoController.getTodoById);
+      router.put('/:id', todoController.updateTodo);
       router.post('/', todoController.createTodo);
-      router.get('/update', todoController.getListTodo);
-      router.get('/delete', todoController.getListTodo);
+      router.delete('/:id', todoController.getListTodo);
       
       return router;
    }

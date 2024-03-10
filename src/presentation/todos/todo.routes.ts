@@ -8,7 +8,7 @@ export class TodoRoutes {
       router.get('/:id', todoController.getTodoById);
       router.put('/:id', todoController.updateTodo);
       router.post('/', todoController.createTodo);
-      router.delete('/:id', todoController.getListTodo);
+      router.delete('/:id', todoController.deleteTodo);
       
       return router;
    }

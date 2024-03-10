@@ -1,7 +1,7 @@
 import { Request, Response} from 'express';
 import { todo } from 'node:test';
 
-const listTodo =  [
+let listTodo =  [
    { id: 1, text: 'But milk', completedAt: new Date() },
    { id: 2, text: 'But cheese', completedAt: new Date() },
    { id: 3, text: 'But bread', completedAt: new Date() },
@@ -93,4 +93,32 @@ export class TodoController {
       });
    }
 
+   deleteTodo = (req: Request, res: Response) => {
+      const id  = +req?.params?.id; 
+
+      if ( !id || isNaN(id)) {
+         return res.status(400).json({
+           msg: 'id is invalid',
+         });
+      }
+      let selectedTodo = null;
+      listTodo  = listTodo.filter( todo => {
+         if ( todo.id !== id ) {
+            return todo;
+         }
+
+         selectedTodo = todo;
+      });
+   
+
+      if (!selectedTodo) {
+         return res.status(404).json({
+           msg: `Todo with id ${id} not found`,
+         });
+      }
+
+      return res.status(200).json({
+        data: selectedTodo,
+      });
+   }
 }

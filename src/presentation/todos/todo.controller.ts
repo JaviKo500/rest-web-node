@@ -1,4 +1,5 @@
 import { Request, Response} from 'express';
+import { prisma } from '../../data/postgres-data';
 
 let listTodo =  [
    { id: 1, text: 'But milk', completedAt: new Date() },
@@ -36,23 +37,24 @@ export class TodoController {
             })
    }
 
-   createTodo = ( req: Request, res: Response ) => {
-      const { text } = req.body;
+   createTodo = async ( req: Request, res: Response ) => {
+      const { text, completedAt } = req.body;
 
       if ( !text ) return res.status(400).json({
         msg: 'Text is required',
       });
 
       const newTodo = {
-         id: listTodo.length + 1,
          text,
-         completedAt: new Date()
+         completedAt: completedAt ?? new Date()
       };
+      
+      const todo = await prisma.todo.create( { data: newTodo } )
 
-      listTodo.push( newTodo );
       
       res.status(200).json({
         msg: 'ok',
+        data: todo,
       });
    }
 

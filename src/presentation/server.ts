@@ -38,6 +38,7 @@ export class Server {
          res.sendFile(indexPath)
          return;
       });
+      
       this.app.listen( this.port, () => {
          console.log('<--------------- JK Server --------------->');
          console.log(`server running port ${this.port}`);

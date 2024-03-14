@@ -1,5 +1,4 @@
 import { Request, Response} from 'express';
-import { todo } from 'node:test';
 
 let listTodo =  [
    { id: 1, text: 'But milk', completedAt: new Date() },

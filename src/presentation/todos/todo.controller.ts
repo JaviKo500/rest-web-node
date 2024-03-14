@@ -12,12 +12,15 @@ export class TodoController {
 
    }
 
-   public getListTodo = (req: Request, res: Response) => {
+   public getListTodo = async (req: Request, res: Response) => {
+
+      const listTodos = await prisma.todo.findMany();
       return res.status(200).json({
-         data: listTodo,
+         data: listTodos,
       });
    }
-   public getTodoById = (req: Request, res: Response) => {
+
+   public getTodoById = async (req: Request, res: Response) => {
       const id = +req?.params?.id
 
       if ( !id || isNaN(id)) {
@@ -26,7 +29,7 @@ export class TodoController {
          });
       }
 
-      const selectedTodo = listTodo.find( todo => todo.id === id );
+      const selectedTodo = await prisma.todo.findFirst({where: {id: id}});
 
       return !selectedTodo
          ? res.status(404).json({
@@ -49,16 +52,15 @@ export class TodoController {
          completedAt: completedAt ?? new Date()
       };
       
-      const todo = await prisma.todo.create( { data: newTodo } )
+      const todo = await prisma.todo.create( { data: newTodo } );
 
-      
       res.status(200).json({
         msg: 'ok',
         data: todo,
       });
    }
 
-   updateTodo = ( req: Request, res: Response ) => {
+   updateTodo = async ( req: Request, res: Response ) => {
       
       const id  = +req?.params?.id; 
 
@@ -68,13 +70,7 @@ export class TodoController {
          });
       }
 
-      const selectedTodo = listTodo.find( todo => todo.id === id );
-
-      if (!selectedTodo) {
-         return res.status(404).json({
-           msg: `Todo with id ${id} not found`,
-         });
-      }
+     
 
       const { text, completedAt } = req.body;
 
@@ -84,17 +80,31 @@ export class TodoController {
          });
       }
 
-      if ( completedAt ) {
-         selectedTodo.text = completedAt;
-      }
-      selectedTodo.text = text;
+      let updateData: any = {
+         text
+      };
 
+      if ( completedAt ) {
+         updateData.completedAt = completedAt;
+      }
+      
+      const selectedTodo = await prisma.todo.update({
+         data: updateData,
+         where: { id }
+      });
+
+      if (!selectedTodo) {
+         return res.status(404).json({
+           msg: `Todo with id ${id} not found`,
+         });
+      }
       res.status(200).json({
         msg: 'Todo updated',
+        data: selectedTodo
       });
    }
 
-   deleteTodo = (req: Request, res: Response) => {
+   deleteTodo = async (req: Request, res: Response) => {
       const id  = +req?.params?.id; 
 
       if ( !id || isNaN(id)) {
@@ -102,15 +112,7 @@ export class TodoController {
            msg: 'id is invalid',
          });
       }
-      let selectedTodo = null;
-      listTodo  = listTodo.filter( todo => {
-         if ( todo.id !== id ) {
-            return todo;
-         }
-
-         selectedTodo = todo;
-      });
-   
+      let selectedTodo = await prisma.todo.findUnique({ where: { id } });
 
       if (!selectedTodo) {
          return res.status(404).json({
@@ -118,6 +120,7 @@ export class TodoController {
          });
       }
 
+      await prisma.todo.delete( { where: { id } } );
       return res.status(200).json({
         data: selectedTodo,
       });

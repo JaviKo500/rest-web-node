@@ -1,11 +1,6 @@
 import { Request, Response} from 'express';
 import { prisma } from '../../data/postgres-data';
 
-let listTodo =  [
-   { id: 1, text: 'But milk', completedAt: new Date() },
-   { id: 2, text: 'But cheese', completedAt: new Date() },
-   { id: 3, text: 'But bread', completedAt: new Date() },
-];
 export class TodoController {
    // * dependencies injected
    constructor() {

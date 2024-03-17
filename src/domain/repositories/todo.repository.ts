@@ -1,22 +1,12 @@
-import { TodoEntity,  CreateTodoDto, TodoDatasource, UpdateTodoDto} from '../';
-import { prisma } from '../../data/postgres-data';
+import { CreateTodoDto } from '../dtos';
+import { TodoEntity } from '../entities/todo.entity';
+import { UpdateTodoDto } from '../dtos/todos/update-todo.dto';
 
-export class TodoRepository implements TodoDatasource{
-   async create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
-      throw new Error("Method not implemented.");
-   }
-   async getall(): Promise<TodoEntity[]> {
-      const listTodos = await prisma.todo.findMany();
-      return listTodos.map( todo => TodoEntity.fromObject( todo ) );
-   }
-   async findById(id: number): Promise<TodoEntity> {
-      throw new Error("Method not implemented.");
-   }
-   async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
-      throw new Error("Method not implemented.");
-   }
-   async deleteById(id: number): Promise<TodoEntity> {
-      throw new Error("Method not implemented.");
-   }
-   
+export abstract class TodoRepository {
+   abstract create( createTodoDto: CreateTodoDto ): Promise<TodoEntity>;
+   // TODO pagination
+   abstract getall(): Promise<TodoEntity[]>;
+   abstract findById( id: number ): Promise<TodoEntity>;
+   abstract updateById( updateTodoDto: UpdateTodoDto ): Promise<TodoEntity>;
+   abstract deleteById( id: number ): Promise<TodoEntity>;
 }

@@ -1,7 +1,6 @@
-import { TodoEntity,  CreateTodoDto, TodoDatasource, UpdateTodoDto} from '../';
 import { prisma } from '../../data/postgres-data';
-
-export class TodoRepository implements TodoDatasource{
+import { CreateTodoDto, TodoDatasource, TodoEntity, UpdateTodoDto } from '../../domain';
+export class TodoDatasourceImpl implements TodoDatasource {
    async create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
       throw new Error("Method not implemented.");
    }

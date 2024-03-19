@@ -2,7 +2,7 @@ import { UpdateTodoDto } from './../../domain/dtos/todos/update-todo.dto';
 import { CreateTodoDto } from './../../domain/dtos';
 import { Request, Response} from 'express';
 import { prisma } from '../../data/postgres-data';
-import { TodoRepository } from '../../domain';
+import { CreateTodo, DeleteTodo, GetTodo, GetTodos, TodoRepository, updateTodo } from '../../domain';
 
 export class TodoController {
    // * dependencies injected
@@ -12,32 +12,28 @@ export class TodoController {
 
    }
 
-   public getListTodo = async (req: Request, res: Response) => {
+   public getListTodo = (req: Request, res: Response) => {
 
-      const listTodos = await this.todoRepository.getall();
-      return res.status(200).json({
-         data: listTodos,
-      });
-      
+      new GetTodos( this.todoRepository )
+         .execute()
+         .then( todos => res.status(200).json({
+            data: todos,
+         }))
+         .catch( err => res.status(400).json({ err: err.message }));
    }
 
-   public getTodoById = async (req: Request, res: Response) => {
+   public getTodoById = (req: Request, res: Response) => {
       const id = +req?.params?.id
 
-      
-      try {
-         const selectedTodo = await this.todoRepository.findById( id );
-         return res.status(200).json({
-            data: selectedTodo,
-         });
-      } catch (error) {
-         return res.status(404).json({
-            msg: error,
-         });
-      }
+      new GetTodo( this.todoRepository )
+         .execute( id )
+         .then( todo => res.status(200).json({
+            data: todo,
+         }))
+         .catch( err =>  res.status(400).json({ err: err.message }) );
    }
 
-   createTodo = async ( req: Request, res: Response ) => {
+   createTodo = ( req: Request, res: Response ) => {
       
       const [ error, createTodoDto ] = CreateTodoDto.create( req.body );
 
@@ -45,12 +41,13 @@ export class TodoController {
         msg: error
       });
       
-      const todo = await this.todoRepository.create( createTodoDto! );
-
-      res.status(200).json({
-        msg: 'ok',
-        data: todo,
-      });
+      new CreateTodo( this.todoRepository )
+         .execute( createTodoDto! )
+         .then( todo => res.status(200).json({
+            msg: 'ok',
+            data: todo,
+          }))
+          .catch( err => res.status(400).json({ err: err.message }) );
    }
 
    updateTodo = async ( req: Request, res: Response ) => {
@@ -63,30 +60,24 @@ export class TodoController {
            msg: error
          });
       }
-      try {
-         const updatesTodo = await this.todoRepository.updateById( updateTodoDto! );
-         return res.status(200).json({
-            data: updatesTodo,
-         });
-      } catch (error) {
-         return res.status(404).json({
-            msg: error,
-         });
-      }
+      new updateTodo( this.todoRepository )
+      .execute( updateTodoDto! )
+      .then( todo => res.status(200).json({
+         msg: 'ok',
+         data: todo,
+       }))
+       .catch( err => res.status(400).json({ err: err.message }) );
    }
 
    deleteTodo = async (req: Request, res: Response) => {
       const id  = +req?.params?.id; 
 
-      try {
-         const deletedTodo = await this.todoRepository.deleteById( id );
-         return res.status(200).json({
-            data: deletedTodo,
-         });
-      } catch (error) {
-         return res.status(404).json({
-            msg: error,
-         });
-      }
+      new DeleteTodo( this.todoRepository )
+         .execute( id )
+         .then( todo => res.status(200).json({
+            msg: 'ok',
+            data: todo,
+          }))
+          .catch( err => res.status(400).json({ err: err.message }) );
    }
 }

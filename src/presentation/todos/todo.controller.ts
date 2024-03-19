@@ -1,7 +1,5 @@
-import { UpdateTodoDto } from './../../domain/dtos/todos/update-todo.dto';
-import { CreateTodoDto } from './../../domain/dtos';
+import { CreateTodoDto, UpdateTodoDto } from './../../domain/dtos';
 import { Request, Response} from 'express';
-import { prisma } from '../../data/postgres-data';
 import { CreateTodo, DeleteTodo, GetTodo, GetTodos, TodoRepository, updateTodo } from '../../domain';
 
 export class TodoController {
@@ -69,7 +67,7 @@ export class TodoController {
        .catch( err => res.status(400).json({ err: err.message }) );
    }
 
-   deleteTodo = async (req: Request, res: Response) => {
+   deleteTodo = (req: Request, res: Response) => {
       const id  = +req?.params?.id; 
 
       new DeleteTodo( this.todoRepository )

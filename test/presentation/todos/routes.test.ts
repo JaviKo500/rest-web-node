@@ -45,4 +45,12 @@ describe('Routes.test', () => {
          completedAt: expect.any(String),
       });
    });
+   test( 'should return a 404 not found api/todo/:id', async () => {
+      const todoId = 999;
+      const { body } = await request(testServer.app)
+         .get(`/api/todo/${todoId}`)
+         .expect(400);
+      expect( body ).toEqual({ err: `Todo with ${todoId} not found ` });
+   });
+
 });

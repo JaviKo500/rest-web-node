@@ -41,7 +41,7 @@ export class TodoController {
       
       new CreateTodo( this.todoRepository )
          .execute( createTodoDto! )
-         .then( todo => res.status(200).json({
+         .then( todo => res.status(201).json({
             msg: 'ok',
             data: todo,
           }))

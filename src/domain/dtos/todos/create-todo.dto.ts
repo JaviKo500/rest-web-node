@@ -10,10 +10,7 @@ export class CreateTodoDto {
 
       const { text, completedAt } = props;
 
-      if ( !text ) return [ 'Text property is required', undefined ];
-
-
-
+      if ( !text || text.length === 0 ) return [ 'Text property is required', undefined ];
 
       return [ undefined, new CreateTodoDto( text, completedAt ) ];
    }

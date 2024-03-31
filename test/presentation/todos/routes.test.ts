@@ -6,6 +6,9 @@ describe('Routes.test', () => {
    beforeAll( async ()=> {
       await testServer.start();
    });
+   afterAll( ()=> {
+      testServer.close();
+   });
    test( 'should return todos api/todo', async () => {
 
       const response = await request( testServer.app )

@@ -8,9 +8,10 @@
     "build": "rimraf ./dist && tsc",
     "start": "node dist/app.js",
     "prisma:migrated": "prisma migrated deploy",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "prisma:migrate:test": "dotenv -e .env.test -- npx prisma migrate deploy",
+    "test": "npm run prisma:migrate:test && jest",
+    "test:watch": "npm run prisma:migrate:test && jest --watch",
+    "test:coverage": "npm run prisma:migrate:test && jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,7 @@
   "dependencies": {
     "@prisma/client": "^5.11.0",
     "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.1",
     "env-var": "^7.4.1",
     "express": "^4.18.3"
   }

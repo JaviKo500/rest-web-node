@@ -129,4 +129,25 @@ describe('Routes.test', () => {
          completedAt: expect.any( String )
       });
    });
+
+   test( 'should delete a todo api/todo/:id', async () => {
+      const todo = await prisma.todo.create( { data: todo1 } );
+      const { body } = await request( testServer.app )
+         .delete( `/api/todo/${todo.id}` )
+         .expect( 200 );
+      expect( body.data ).toEqual( {
+         id: expect.any( Number ),
+         text: todo.text,
+         completedAt: expect.any(String)
+       });
+   });
+
+   test( 'should return 404 id todo not exit api/todo/:id', async () => {
+      const idTodo = 999;
+      const { body } = await request( testServer.app )
+         .delete( `/api/todo/${idTodo}` )
+         .expect( 400 );
+
+      expect( body ).toEqual( { err: 'Todo with 999 not found ' } );
+   });
 });

@@ -9,3 +9,6 @@ export * from './uses-cases/todos/update-todo';
 export * from './uses-cases/todos/delete-todo';
 export * from './uses-cases/todos/get-todo';
 export * from './uses-cases/todos/get-todos';
+
+// * errors
+export * from './errors/custom.error';

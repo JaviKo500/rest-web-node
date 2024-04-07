@@ -1,6 +1,6 @@
 import { CreateTodoDto, UpdateTodoDto } from './../../domain/dtos';
 import { Request, Response} from 'express';
-import { CreateTodo, DeleteTodo, GetTodo, GetTodos, TodoRepository, updateTodo } from '../../domain';
+import { CreateTodo, CustomError, DeleteTodo, GetTodo, GetTodos, TodoRepository, updateTodo } from '../../domain';
 
 export class TodoController {
    // * dependencies injected
@@ -10,6 +10,17 @@ export class TodoController {
 
    }
 
+   public handleError = (res: Response, error: unknown) => {
+      if ( error instanceof CustomError) {
+         return res.status(error.statusCode).json({
+           error: error.message,
+         });
+      }
+
+      res.status(500).json({
+        error: 'Internal Server Error check logs',
+      });
+   }
    public getListTodo = (req: Request, res: Response) => {
 
       new GetTodos( this.todoRepository )
@@ -17,7 +28,7 @@ export class TodoController {
          .then( todos => res.status(200).json({
             data: todos,
          }))
-         .catch( err => res.status(400).json({ err: err.message }));
+         .catch( err => this.handleError( res, err ));
    }
 
    public getTodoById = (req: Request, res: Response) => {
@@ -28,7 +39,7 @@ export class TodoController {
          .then( todo => res.status(200).json({
             data: todo,
          }))
-         .catch( err =>  res.status(400).json({ err: err.message }) );
+         .catch( err =>  this.handleError( res, err ));
    }
 
    createTodo = ( req: Request, res: Response ) => {
@@ -45,7 +56,7 @@ export class TodoController {
             msg: 'ok',
             data: todo,
           }))
-          .catch( err => res.status(400).json({ err: err.message }) );
+          .catch( err => this.handleError( res, err ));
    }
 
    updateTodo = async ( req: Request, res: Response ) => {
@@ -64,7 +75,7 @@ export class TodoController {
          msg: 'ok',
          data: todo,
        }))
-       .catch( err => res.status(400).json({ err: err.message }) );
+       .catch( err => this.handleError( res, err ));
    }
 
    deleteTodo = (req: Request, res: Response) => {
@@ -76,6 +87,6 @@ export class TodoController {
             msg: 'ok',
             data: todo,
           }))
-          .catch( err => res.status(400).json({ err: err.message }) );
+          .catch( err => this.handleError( res, err ));
    }
 }

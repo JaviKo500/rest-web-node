@@ -49,7 +49,7 @@ describe('Routes.test', () => {
       const todoId = 999;
       const { body } = await request(testServer.app)
          .get(`/api/todo/${todoId}`)
-         .expect(400);
+         .expect(404);
       expect( body ).toEqual({ err: `Todo with ${todoId} not found ` });
    });
    test( 'should return a new todo api/todo', async () => {
@@ -98,7 +98,7 @@ describe('Routes.test', () => {
       const { body } = await request( testServer.app )
          .put( `/api/todo/${idTodo}` )
          .send( { text: 'test updated', completedAt: '2023-10-21' } )
-         .expect( 400 );
+         .expect( 404 );
       expect( body ).toEqual({ err: 'Todo with 999 not found ' });
    });
 
@@ -146,7 +146,7 @@ describe('Routes.test', () => {
       const idTodo = 999;
       const { body } = await request( testServer.app )
          .delete( `/api/todo/${idTodo}` )
-         .expect( 400 );
+         .expect( 404 );
 
       expect( body ).toEqual( { err: 'Todo with 999 not found ' } );
    });

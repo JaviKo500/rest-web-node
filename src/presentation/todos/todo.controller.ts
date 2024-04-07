@@ -13,7 +13,7 @@ export class TodoController {
    public handleError = (res: Response, error: unknown) => {
       if ( error instanceof CustomError) {
          return res.status(error.statusCode).json({
-           error: error.message,
+           err: error.message,
          });
       }
 
